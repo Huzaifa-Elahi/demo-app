@@ -23,9 +23,11 @@ const HomeScreen = ({ navigation }) => {
   // const handleMarkerPress = () => {
   //   setModalVisible(true);
   // };
+  const [currentMarker ,setcurrentMarker]=useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const handleModalClose = () => {
-      setModalVisible(true);
+      setModalVisible(false);
+      console.log('closed');
     // code to handle closing the modal
   };
 
@@ -57,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
         asr: doc.data().asr,
         maghrib: doc.data().maghrib,
         isha: doc.data().isha,
-        jummah: doc.data().jummah,
+        jumma: doc.data().jumma,
         url: doc.data().url,
       });
 
@@ -126,6 +128,10 @@ const HomeScreen = ({ navigation }) => {
     UserLocation();
     ReadData();
   }, []);
+  const handleMarkerPress =(location)=>{
+    setModalVisible(true),
+    setcurrentMarker(location)
+  }
 
   return (
     <View style={styles.container}>
@@ -148,8 +154,11 @@ const HomeScreen = ({ navigation }) => {
                   longitude: location.longitude,
                 }}
                 title={location.name}
-                image={location.url}
-                onPress={() => setModalVisible(true)}
+                // image={location.url}
+                onPress={() => handleMarkerPress(location)
+                // console.log(onPress)
+                }
+                
                 // onPress={handleMarkerPress}
               />
             );
@@ -160,14 +169,7 @@ const HomeScreen = ({ navigation }) => {
             return null;
           }
         })}
-        <Modal visible={modalVisible} onRequestClose={handleModalClose}>
-          <View>
-            {/* <Text>{location.name}</Text> */}
-            <TouchableOpacity onPress={handleModalClose}>
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
+        
         {/* <Modal visible={modalVisible}>
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -179,6 +181,28 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </Modal> */}
       </MapView>
+      <Modal visible={modalVisible} onRequestClose={handleModalClose}>
+          <View style={styles.modalView}>
+            {/* <Text>{location.name}</Text> */}
+            {/* <TouchableOpacity > */}
+              
+              {/* <Text >{JSON.stringify(currentMarker)}</Text> */}
+              <Text >Fajr: {(currentMarker['fajr'])}</Text>
+              <Text >Zuhr: {(currentMarker['zohr'])}</Text>
+              <Text >Asr: {(currentMarker['asr'])}</Text>
+              <Text >Maghrib: {(currentMarker['maghrib'])}</Text>
+              <Text >Isha: {(currentMarker['isha'])}</Text>
+              <Text >Jummah: {(currentMarker['jumma'])}</Text>
+              <Text >Area: {(currentMarker['area'])}</Text>
+              {/* <Image source={('https://pk.top10place.com/img_files/147421088687399')}/> */}
+              <Image source = {{uri:(currentMarker['url'])}}
+   style = {{ width: 150, height: 150 }}
+   /> 
+              <Button title="close" onPress={handleModalClose}/>
+              {/* <Text >{(currentMarker['url'])}</Text> */}
+            {/* </TouchableOpacity> */}
+          </View>
+        </Modal>
       <Button title="Get Location" onPress={UserLocation} />
     </View>
   );
@@ -197,4 +221,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
+  close:{
+    width:80,
+    height:80,
+    // marginTop: 10,
+  },
+  modalView:{
+    alignItems: "center",
+    marginTop: 40,
+    
+  }
 });
