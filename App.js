@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import LoginScreen from './src/Screens/LoginScreen';
 import SignupScreen from './src/Screens/SignupScreen';
 import { auth } from './firebase/firebase.config';
+// import './styles.css';
 
 // import { initializeApp, auth } from "firebase/app";
 // import { auth } from './firebase/firebase.config';
